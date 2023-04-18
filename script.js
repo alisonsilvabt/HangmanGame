@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var input = modal.querySelector('input');
   
     button.addEventListener('click', function() {
-      var value = input.value;
+      var value = input.value.toUpperCase();
       players[value] = { score: 0 };
       modal.style.display = "none";
       gerarListaJogadores();
@@ -38,7 +38,7 @@ function gerarListaJogadores() {
       const jogador = document.createElement("li");
       const player = Object.keys(players)[i];
       const scorePlayer = players[player].score ? players[player].score : 0;
-      jogador.textContent = player + ": " + scorePlayer + " pontos";
+      jogador.textContent = styleString(player) + ": " + scorePlayer + " pontos";
       lista.appendChild(jogador);
     }
     const lengthPlayers = Object.keys(players).length;
@@ -48,7 +48,8 @@ function gerarListaJogadores() {
     } else {
         indexPlayer = 0;
     }
-    document.getElementById("quem-joga").innerHTML = "Jogador: " + Object.keys(players)[indexPlayer];
+    const quemJoga = Object.keys(players)[indexPlayer];
+    document.getElementById("quem-joga").innerHTML = "Jogador: " + styleString(quemJoga);
 }
 
 function obterNumeroDeLetrasUnicas(palavra) {
@@ -217,13 +218,20 @@ function reiniciarJogo(palavraPersonalizada = null, first = false) {
 }
 
 function updateJogadores() {
-    const jogador = document.getElementById('jogador').value;
-    document.getElementById('jogador').value = '';
+    clearField('erro');
+    const jogador = document.getElementById('jogador').value.toUpperCase();
+    clearField('jogador');
     // Faz as alterações desejadas no objeto JavaScript
     if (players[jogador]) {
         document.getElementById("erro").innerHTML = "Jogador Já existe";
+        //new Promise((res) => setTimeout(res, 5000));
+        //clearField('erro');
+        return;
     } else if (Object.keys(players).length >= 5) {
         document.getElementById("erro").innerHTML = "Limite de jogadores atingido";
+        //new Promise((res) => setTimeout(res, 5000));
+        //clearField('erro');
+        return;
     }
     players[jogador] = { score: 0 };
     gerarListaJogadores();

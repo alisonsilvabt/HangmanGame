@@ -38,10 +38,16 @@ body {
     color: #333;
   }
   
-  #jogadores, #quem-joga {
+  #jogadores {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 30px;
+    left: 35px;
+  }
+
+  #quem-joga {
+    position: absolute;
+    top: 25px;
+    left: 55px;
   }
 
   #quem-joga {
@@ -64,7 +70,12 @@ body {
     text-align: center;
     color: #666;
   }
-  
+
+  #erro {
+    color:#cc0000;
+  }
+
+
   #dica {
     margin-top: 20px;
     font-size: 18px;
