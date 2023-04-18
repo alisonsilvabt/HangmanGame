@@ -41,7 +41,13 @@ function gerarListaJogadores() {
       jogador.textContent = player + ": " + scorePlayer + " pontos";
       lista.appendChild(jogador);
     }
-    indexPlayer = indexPlayer === Object.keys(players).length ? indexPlayer : indexPlayer+1;
+    const lengthPlayers = Object.keys(players).length;
+    if (lengthPlayers > 0) {
+        if (indexPlayer === (lengthPlayers  - 1)) indexPlayer = 0;
+        else indexPlayer++;
+    } else {
+        indexPlayer = 0;
+    }
     document.getElementById("quem-joga").innerHTML = "Jogador: " + Object.keys(players)[indexPlayer];
 }
 
@@ -80,7 +86,7 @@ const pointSound = new Audio('media/point.wav');
 
 
 // Inicie o jogo chamando a função para reiniciá-lo
-reiniciarJogo();
+reiniciarJogo(null, true);
 
 // Escolha uma palavra aleatória da lista e exiba sua dica na tela HTML
 var indicePalavraEscolhida = Math.floor(Math.random() * palavras.length);
@@ -140,7 +146,7 @@ function atualizarPalavra(letras) {
 function verificarAdivinhacao() {
     var letra = document.getElementById("letra").value.toUpperCase();
     clearField("letra");
-    const quemJoga =Object.keys(players)[indexPlayer];
+    const quemJoga = Object.keys(players)[indexPlayer];
     if (verificarLetra(letra, arvore)) {
         pointSound.play();
         letrasCorretas.push(letra);
@@ -186,8 +192,8 @@ function atualizarBoneco() {
 }
     
     // Defina uma função para reiniciar o jogo
-function reiniciarJogo(palavraPersonalizada = null) {
-    gerarListaJogadores();
+function reiniciarJogo(palavraPersonalizada = null, first = false) {
+    if (!first) gerarListaJogadores();
     // Escolha uma nova palavra aleatória da lista e exiba sua dica na tela HTML
     if (palavraPersonalizada) {
         palavraEscolhida = palavraPersonalizada.palavra;
