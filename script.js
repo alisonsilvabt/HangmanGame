@@ -58,9 +58,15 @@ function obterNumeroDeLetrasUnicas(palavra) {
     return Object.keys(letrasUnicas).length;
 }
 
+function clearField(id) {
+    document.getElementById(id).value = "";
+}
+
 function setPalavra() {
     var palavra = document.getElementById("novaPalavra").value;
+    clearField("novaPalavra");
     var dica = document.getElementById("novaDica").value;
+    clearField("novaDica");
     var qtnLetras = obterNumeroDeLetrasUnicas(palavra);
     var palavraObj = { palavra: palavra.toUpperCase(), dica: dica, qtnLetras: qtnLetras };
     palavras.push(palavraObj);
@@ -133,7 +139,7 @@ function atualizarPalavra(letras) {
 // Defina uma função para verificar se a palavra foi adivinhada
 function verificarAdivinhacao() {
     var letra = document.getElementById("letra").value.toUpperCase();
-    document.getElementById("letra").value = "";
+    clearField("letra");
     const quemJoga =Object.keys(players)[indexPlayer];
     if (verificarLetra(letra, arvore)) {
         pointSound.play();
@@ -206,6 +212,7 @@ function reiniciarJogo(palavraPersonalizada = null) {
 
 function updateJogadores() {
     const jogador = document.getElementById('jogador').value;
+    document.getElementById('jogador').value = '';
     // Faz as alterações desejadas no objeto JavaScript
     if (players[jogador]) {
         document.getElementById("erro").innerHTML = "Jogador Já existe";
