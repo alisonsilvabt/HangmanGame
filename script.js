@@ -1,3 +1,24 @@
+let players = {};
+let indexPlayer = -1;
+
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('modal');
+    var button = modal.querySelector('button');
+    var input = modal.querySelector('input');
+  
+    button.addEventListener('click', function() {
+      var value = input.value;
+      players[value] = { score: 0 };
+      modal.style.display = "none";
+      gerarListaJogadores();
+      //document.getElementById("quem-joga").innerHTML = "Jogador: " + Object.keys(players)[indexPlayer];
+    });
+  
+    modal.style.display = 'block'; // Exibe o modal
+});
+
+
+
 // Defina uma lista de palavras possíveis com suas respectivas dicas
 var palavras = [
     { palavra: "BOLA", dica: "Objeto esférico usado em diversos esportes", qtnLetras: 4 },
@@ -8,6 +29,45 @@ var palavras = [
     { palavra: "GATO", dica: "Animal doméstico de estimação com pelos macios", qtnLetras: 4 },
     { palavra: "ABACAXI", dica: "Fruta tropical com casca dura e polpa doce", qtnLetras: 5 },
 ];
+
+
+function gerarListaJogadores() {
+    const lista = document.getElementById("jogadores");
+    lista.innerHTML = ""; // remove todos os elementos filhos da div "jogadores"
+    for (let i = 0; i < Object.keys(players).length; i++) {
+      const jogador = document.createElement("li");
+      const player = Object.keys(players)[i];
+      const scorePlayer = players[player].score ? players[player].score : 0;
+      jogador.textContent = player + ": " + scorePlayer + " pontos";
+      lista.appendChild(jogador);
+    }
+    indexPlayer = indexPlayer === Object.keys(players).length ? indexPlayer : indexPlayer+1;
+    document.getElementById("quem-joga").innerHTML = "Jogador: " + Object.keys(players)[indexPlayer];
+}
+
+function obterNumeroDeLetrasUnicas(palavra) {
+    const letras = palavra.split(''); // Converte a palavra para uma matriz de caracteres
+    const letrasUnicas = {}; // Objeto para armazenar as letras únicas
+  
+    // Percorre a matriz de caracteres e adiciona cada letra única ao objeto
+    letras.forEach(letra => {
+      letrasUnicas[letra] = true;
+    });
+  
+    // Retorna o número de letras únicas
+    return Object.keys(letrasUnicas).length;
+}
+
+function setPalavra() {
+    var palavra = document.getElementById("novaPalavra").value;
+    var dica = document.getElementById("novaDica").value;
+    var qtnLetras = obterNumeroDeLetrasUnicas(palavra);
+    var palavraObj = { palavra: palavra.toUpperCase(), dica: dica, qtnLetras: qtnLetras };
+    palavras.push(palavraObj);
+    console.log(palavraObj);
+    reiniciarJogo(palavraObj)
+}
+
 const winSound = new Audio('media/win.wav');
 const endSound = new Audio('media/end.wav');
 const pointSound = new Audio('media/point.wav');
@@ -15,8 +75,6 @@ const pointSound = new Audio('media/point.wav');
 
 // Inicie o jogo chamando a função para reiniciá-lo
 reiniciarJogo();
-
-
 
 // Escolha uma palavra aleatória da lista e exiba sua dica na tela HTML
 var indicePalavraEscolhida = Math.floor(Math.random() * palavras.length);
@@ -59,51 +117,49 @@ function verificarLetra(letra, no) {
 }
 
 // Defina uma função para atualizar a exibição da palavra
-function atualizarPalavra(letrasCorretas) {
+function atualizarPalavra(letras) {
     var palavraExibicao = "";
     for (var i = 0; i < palavraEscolhida.length; i++) {
-        if (letrasCorretas.indexOf(palavraEscolhida[i]) !== -1) {
+        if (letras.indexOf(palavraEscolhida[i]) !== -1) {
             palavraExibicao += palavraEscolhida[i] + " ";
         } else {
             palavraExibicao += "_ ";
         }
     }
     document.getElementById("palavra").innerHTML = palavraExibicao
+    return palavraExibicao.replace(/\s+/g, '').trim();
 }
 
 // Defina uma função para verificar se a palavra foi adivinhada
 function verificarAdivinhacao() {
     var letra = document.getElementById("letra").value.toUpperCase();
     document.getElementById("letra").value = "";
+    const quemJoga =Object.keys(players)[indexPlayer];
     if (verificarLetra(letra, arvore)) {
-        letrasCorretas.push(letra);
         pointSound.play();
+        letrasCorretas.push(letra);
     } else if (letra === palavraEscolhida) {
         letrasCorretas = palavraEscolhida.split("");
         winSound.play();
         alert("Parabéns, você acertou a palavra " + palavraEscolhida + "!");
+        players[quemJoga].score++;
         reiniciarJogo();
-    }
-    else {
+    } else {
         tentativasRestantes--;
         atualizarBoneco();
     }
-    atualizarPalavra(letrasCorretas);
+    const atualizar = atualizarPalavra(letrasCorretas).toString();
+    if (atualizar == palavraEscolhida) {
+        winSound.play();
+        alert("Parabéns, você acertou a palavra " + palavraEscolhida + "!");
+        players[quemJoga].score++;
+        reiniciarJogo();
+    }
     atualizarTentativas();
     if (tentativasRestantes === 0) {
         endSound.play();
         alert("Fim de jogo! A palavra era " + palavraEscolhida);
         reiniciarJogo();
-    } else if (letrasCorretas.length === letrasPalavraEscolhida) {
-        winSound.play();
-        alert("Parabéns, você acertou a palavra " + palavraEscolhida + "!");
-        reiniciarJogo();
-    } else {
-        console.log(" ---------------------------- ")
-        console.log("letrasCorretas: " +letrasCorretas)
-        console.log("letrasCorretasLength: " +letrasCorretas.length)
-        console.log("PalavraEscolhida: " + palavraEscolhida)
-        console.log("PalavraEscolhidaLength: " + palavraEscolhida.length)
     }
 }
     
@@ -124,12 +180,19 @@ function atualizarBoneco() {
 }
     
     // Defina uma função para reiniciar o jogo
-function reiniciarJogo() {
+function reiniciarJogo(palavraPersonalizada = null) {
+    gerarListaJogadores();
     // Escolha uma nova palavra aleatória da lista e exiba sua dica na tela HTML
-    indicePalavraEscolhida = Math.floor(Math.random() * palavras.length);
-    palavraEscolhida = palavras[indicePalavraEscolhida].palavra;
-    dicaPalavraEscolhida = palavras[indicePalavraEscolhida].dica;
+    if (palavraPersonalizada) {
+        palavraEscolhida = palavraPersonalizada.palavra;
+        dicaPalavraEscolhida = palavraPersonalizada.dica;
+    } else {
+        indicePalavraEscolhida = Math.floor(Math.random() * palavras.length);
+        palavraEscolhida = palavras[indicePalavraEscolhida].palavra;
+        dicaPalavraEscolhida = palavras[indicePalavraEscolhida].dica;
+    }
     document.getElementById("dica").innerHTML = "Dica: " + dicaPalavraEscolhida;
+
     // Crie uma nova árvore binária para a nova palavra escolhida
     arvore = criarArvore(palavraEscolhida);
 
@@ -139,6 +202,18 @@ function reiniciarJogo() {
     atualizarPalavra(letrasCorretas);
     atualizarTentativas();
     reiniciarBoneco();
+}
+
+function updateJogadores() {
+    const jogador = document.getElementById('jogador').value;
+    // Faz as alterações desejadas no objeto JavaScript
+    if (players[jogador]) {
+        document.getElementById("erro").innerHTML = "Jogador Já existe";
+    } else if (Object.keys(players).length >= 5) {
+        document.getElementById("erro").innerHTML = "Limite de jogadores atingido";
+    }
+    players[jogador] = { score: 0 };
+    gerarListaJogadores();
 }
 
 // Defina uma função para reiniciar a exibição do boneco

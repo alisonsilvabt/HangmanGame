@@ -6,6 +6,15 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Adicione o Jogador 1.</p>
+        <input type="text" placeholder="Nome do Jogador">
+        <button>Enviar</button>
+      </div>
+    </div>
+
     <h1>Jogo da Forca</h1>
     <div id="forca">
         <svg height="250" width="200">
@@ -23,8 +32,26 @@
     <div id="palavra"></div>
     <div id="tentativas"></div>
     <div id="dica"></div>
-    <input type="text" id="letra">
+    <div id="jogadores"></div>
+    <div id="quem-joga"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
-    <button onclick="verificarAdivinhacao()">Adivinhar</button>
+
+    <input class="letra" type="text" id="letra" placeholder="Letra Ou Palavra">
+    <button class="btn-verificar" onclick="verificarAdivinhacao()">Adivinhar</button>
+    <button class="btn-pular" onclick="reiniciarJogo()">Pular</button>
+
+    <h3 class="personalizada">Nova Palavra</h3>
+    <input type="text" class="novaPalavra" id="novaPalavra" placeholder="Nova Palavra">
+    <input type="text" class="dicaNovaPalavra" id="novaDica" placeholder="Dica">
+    <button class="btn-iniciar" onclick="setPalavra()">Iniciar</button>
+
+    <h3 class="novo-jogador">Novo Jogador(a)</h3>
+    <input type="text" class="jogador" id="jogador" placeholder="Nome">
+    <button class="btn-cadastrar" onclick="updateJogadores()">Cadastrar</button>
+
+    <div id="erro"></div>
   </body>
 </html>
