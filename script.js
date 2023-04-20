@@ -2,12 +2,12 @@ let players = {};
 let indexPlayer = -1;
 
 document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById('modal');
-    var button = modal.querySelector('button');
-    var input = modal.querySelector('input');
+    let modal = document.getElementById('modal');
+    let button = modal.querySelector('button');
+    let input = modal.querySelector('input');
   
     button.addEventListener('click', function() {
-      var value = input.value.toUpperCase();
+      let value = input.value.toUpperCase();
       players[value] = { score: 0 };
       modal.style.display = "none";
       gerarListaJogadores();
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Defina uma lista de palavras possíveis com suas respectivas dicas
-var palavras = [
+const palavras = [
     { palavra: "BOLA", dica: "Objeto esférico usado em diversos esportes", qtnLetras: 4 },
     { palavra: "CARRO", dica: "Veículo de quatro rodas usado para transporte", qtnLetras: 4 },
     { palavra: "CASA", dica: "Habitação comum feita de tijolos, madeira, etc.", qtnLetras: 3 },
@@ -70,12 +70,12 @@ function clearField(id) {
 }
 
 function setPalavra() {
-    var palavra = document.getElementById("novaPalavra").value;
+    let palavra = document.getElementById("novaPalavra").value;
     clearField("novaPalavra");
-    var dica = document.getElementById("novaDica").value;
+    let dica = document.getElementById("novaDica").value;
     clearField("novaDica");
-    var qtnLetras = obterNumeroDeLetrasUnicas(palavra);
-    var palavraObj = { palavra: palavra.toUpperCase(), dica: dica, qtnLetras: qtnLetras };
+    let qtnLetras = obterNumeroDeLetrasUnicas(palavra);
+    let palavraObj = { palavra: palavra.toUpperCase(), dica: dica, qtnLetras: qtnLetras };
     palavras.push(palavraObj);
     console.log(palavraObj);
     reiniciarJogo(palavraObj)
@@ -92,7 +92,7 @@ reiniciarJogo(null, true);
 // Escolha uma palavra aleatória da lista e exiba sua dica na tela HTML
 var indicePalavraEscolhida = Math.floor(Math.random() * palavras.length);
 var palavraEscolhida = palavras[indicePalavraEscolhida].palavra;
-var letrasPalavraEscolhida = palavras[indicePalavraEscolhida].qtnLetras;
+//let letrasPalavraEscolhida = palavras[indicePalavraEscolhida].qtnLetras;
 
 document.documentElement.style.setProperty('--tamanho-palavra', palavra.length);
 var dicaPalavraEscolhida = palavras[indicePalavraEscolhida].dica;
@@ -100,10 +100,10 @@ document.getElementById("dica").innerHTML = "Dica: " + dicaPalavraEscolhida;
 
 // Defina uma função para criar uma árvore binária a partir da palavra escolhida
 function criarArvore(palavra) {
-    var letras = palavra.split("");
-    var raiz = { letra: letras[0], esquerda: null, direita: null };
-    var atual = raiz;
-    for (var i = 1; i < letras.length; i++) {
+    let letras = palavra.split("");
+    let raiz = { letra: letras[0], esquerda: null, direita: null };
+    let atual = raiz;
+    for (let i = 1; i < letras.length; i++) {
         if (Math.random() < 0.5) {
             atual.esquerda = { letra: letras[i], esquerda: null, direita: null };
             atual = atual.esquerda;
@@ -131,8 +131,8 @@ function verificarLetra(letra, no) {
 
 // Defina uma função para atualizar a exibição da palavra
 function atualizarPalavra(letras) {
-    var palavraExibicao = "";
-    for (var i = 0; i < palavraEscolhida.length; i++) {
+    let palavraExibicao = "";
+    for (let i = 0; i < palavraEscolhida.length; i++) {
         if (letras.indexOf(palavraEscolhida[i]) !== -1) {
             palavraExibicao += palavraEscolhida[i] + " ";
         } else {
@@ -145,7 +145,7 @@ function atualizarPalavra(letras) {
 
 // Defina uma função para verificar se a palavra foi adivinhada
 function verificarAdivinhacao() {
-    var letra = document.getElementById("letra").value.toUpperCase();
+    let letra = document.getElementById("letra").value.toUpperCase();
     clearField("letra");
     const quemJoga = Object.keys(players)[indexPlayer];
     if (verificarLetra(letra, arvore)) {
@@ -178,17 +178,16 @@ function verificarAdivinhacao() {
     
     // Defina uma função para atualizar a exibição do número de tentativas restantes
 function atualizarTentativas() {
-    var tentativasExibicao = "Tentativas restantes: " + tentativasRestantes;
-    document.getElementById("tentativas").innerHTML = tentativasExibicao;
+    document.getElementById("tentativas").innerHTML = "Tentativas restantes: " + tentativasRestantes;
 }
     
     // Defina uma função para atualizar a exibição do boneco
 function atualizarBoneco() {
-    var partesBoneco = [
+    let partesBoneco = [
     "cabeca", "corpo", "braco-esquerdo", "braco-direito",
     "perna-esquerda", "perna-direita"
     ];
-    var parteAtual = partesBoneco[5 - tentativasRestantes];
+    let parteAtual = partesBoneco[5 - tentativasRestantes];
     document.getElementById(parteAtual).style.display = "block";
 }
     
@@ -200,13 +199,13 @@ function reiniciarJogo(palavraPersonalizada = null, first = false) {
         palavraEscolhida = palavraPersonalizada.palavra;
         dicaPalavraEscolhida = palavraPersonalizada.dica;
     } else {
-        indicePalavraEscolhida = Math.floor(Math.random() * palavras.length);
+        indicePalavraEscolhida = Math.floor(Math.random() * (Object.keys(palavras).length));
         palavraEscolhida = palavras[indicePalavraEscolhida].palavra;
         dicaPalavraEscolhida = palavras[indicePalavraEscolhida].dica;
     }
     document.getElementById("dica").innerHTML = "Dica: " + dicaPalavraEscolhida;
 
-    // Crie uma nova árvore binária para a nova palavra escolhida
+    // Crie uma árvore binária para a nova palavra escolhida
     arvore = criarArvore(palavraEscolhida);
 
     // Reinicie as variáveis do jogo
@@ -239,11 +238,11 @@ function updateJogadores() {
 
 // Defina uma função para reiniciar a exibição do boneco
 function reiniciarBoneco() {
-    var partesBoneco = [
+    let partesBoneco = [
     "cabeca", "braco-esquerdo", "braco-direito",
     "perna-esquerda", "perna-direita"
     ];
-    for (var i = 0; i < partesBoneco.length; i++) {
+    for (let i = 0; i < partesBoneco.length; i++) {
         document.getElementById(partesBoneco[i]).style.display = "none";
     }
 }

@@ -1,58 +1,72 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Jogo da Forca</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Adicione o Jogador 1.</p>
-        <input type="text" placeholder="Nome do Jogador">
-        <button>Enviar</button>
-      </div>
-    </div>
+<html lang="pt">
+    <head>
+        <meta charset="UTF-8">
+        <title>Jogo da Forca</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <div id="info">
+            <div id="jogadores"></div>
+            <div id="quem-joga"></div>
+            <div id="erro"></div>
+        </div>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Adicione o Jogador 1.</p>
+                <label>
+                    <input type="text" placeholder="Nome do Jogador">
+                </label>
+                <button>Enviar</button>
+            </div>
+        </div>
+        <div id="game">
+            <h1>Jogo da Forca</h1>
 
-    <h1>Jogo da Forca</h1>
-    <div id="forca">
-        <svg height="250" width="200">
-            <line x1="60" y1="20" x2="140" y2="20" stroke="black" stroke-width="4" />
-            <line x1="140" y1="20" x2="140" y2="50" stroke="black" stroke-width="4" />
-            <line x1="60" y1="20" x2="60" y2="230" stroke="black" stroke-width="4" />
-            <line x1="20" y1="230" x2="100" y2="230" stroke="black" stroke-width="4" />
-            <circle cx="140" cy="70" r="20" stroke="black" stroke-width="4" fill="white" id="cabeca" style="display: none" />
-            <line x1="140" y1="90" x2="140" y2="140" stroke="black" stroke-width="4" id="corpo" style="display: none" />
-            <line x1="140" y1="110" x2="120" y2="90" stroke="black" stroke-width="4" id="braco-esquerdo" style="display: none" />
-            <line x1="140" y1="110" x2="160" y2="90" stroke="black" stroke-width="4" id="braco-direito" style="display: none" />
-            <line x1="140" y1="140" x2="120" y2="160" stroke="black" stroke-width="4" id="perna-direita" style="display: none" />
-            <line x1="140" y1="140" x2="160" y2="160" stroke="black" stroke-width="4" id="perna-esquerda" style="display: none" />
-        </svg>
-    <div id="palavra"></div>
-    <div id="tentativas"></div>
-    <div id="dica"></div>
-    <div id="jogadores"></div>
-    <div id="quem-joga"></div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <div id="forca">
+                <svg height="250" width="200">
+                    <line x1="60" y1="20" x2="140" y2="20" stroke="black" stroke-width="4" />
+                    <line x1="140" y1="20" x2="140" y2="50" stroke="black" stroke-width="4" />
+                    <line x1="60" y1="20" x2="60" y2="230" stroke="black" stroke-width="4" />
+                    <line x1="20" y1="230" x2="100" y2="230" stroke="black" stroke-width="4" />
+                    <circle cx="140" cy="70" r="20" stroke="black" stroke-width="4" fill="white" id="cabeca" style="display: none" />
+                    <line x1="140" y1="90" x2="140" y2="140" stroke="black" stroke-width="4" id="corpo" style="display: none" />
+                    <line x1="140" y1="110" x2="120" y2="90" stroke="black" stroke-width="4" id="braco-esquerdo" style="display: none" />
+                    <line x1="140" y1="110" x2="160" y2="90" stroke="black" stroke-width="4" id="braco-direito" style="display: none" />
+                    <line x1="140" y1="140" x2="120" y2="160" stroke="black" stroke-width="4" id="perna-direita" style="display: none" />
+                    <line x1="140" y1="140" x2="160" y2="160" stroke="black" stroke-width="4" id="perna-esquerda" style="display: none" />
+                </svg>
+            </div>
+            <div id="palavra"></div>
+            <div id="tentativas"></div>
+            <div id="dica"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+            <div id="inputsForca">
+                <label for="letra"></label><input class="letra" type="text" id="letra" placeholder="Letra Ou Palavra">
+                <button class="btn-verificar" onclick="verificarAdivinhacao()">Adivinhar</button>
+                <button class="btn-pular" onclick="reiniciarJogo()">Pular</button>
+            </div>
+        </div>
+
+        <div id="set">
+            <div id="setPalavra">
+                <h3 class="personalizada">Palavra Personalizada</h3>
+                <p class="aviso">Não utilize espaços!</p>
+                <label for="novaPalavra"></label><input type="text" class="novaPalavra" id="novaPalavra" placeholder="Nova Palavra">
+                <label for="novaDica"></label><input type="text" class="dicaNovaPalavra" id="novaDica" placeholder="Dica">
+                <button class="btn-iniciar" onclick="setPalavra()">Iniciar</button>
+            </div>
+
+            <div id="setJogador">
+                <h3 class="novo-jogador">Novo Jogador(a)</h3>
+                <label for="jogador"></label><input type="text" class="jogador" id="jogador" placeholder="Nome">
+                <button class="btn-cadastrar" onclick="updateJogadores()">Cadastrar</button>
+            </div>
+        </div>
+    </body>
     <script src="script.js"></script>
     <script src="utils.js"></script>
-
-    <input class="letra" type="text" id="letra" placeholder="Letra Ou Palavra">
-    <button class="btn-verificar" onclick="verificarAdivinhacao()">Adivinhar</button>
-    <button class="btn-pular" onclick="reiniciarJogo()">Pular</button>
-
-    <h3 class="personalizada">Nova Palavra</h3>
-    <input type="text" class="novaPalavra" id="novaPalavra" placeholder="Nova Palavra">
-    <input type="text" class="dicaNovaPalavra" id="novaDica" placeholder="Dica">
-    <button class="btn-iniciar" onclick="setPalavra()">Iniciar</button>
-
-    <h3 class="novo-jogador">Novo Jogador(a)</h3>
-    <input type="text" class="jogador" id="jogador" placeholder="Nome">
-    <button class="btn-cadastrar" onclick="updateJogadores()">Cadastrar</button>
-
-    <div id="erro"></div>
-  </body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
 </html>
