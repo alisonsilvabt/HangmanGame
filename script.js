@@ -70,8 +70,6 @@ function gerarListaJogadores() {
 
 
     const player = Object.keys(players)[i];
-    console.log('player: ', player);
-    console.log('Object.keys(players): ', Object.keys(players));
     const scorePlayer = players[player].score ? players[player].score : 0;
     jogador.textContent = styleString(player) + ": " + scorePlayer + " pontos";
     const newPlayer = `
@@ -111,7 +109,6 @@ function setPalavra() {
     qtnLetras: qtnLetras,
   };
   palavras.push(palavraObj);
-  console.log(palavraObj);
   reiniciarJogo(palavraObj);
 }
 
