@@ -207,6 +207,9 @@ body {
   }
 
   #erro {
+    width: 200px;
+    margin-top: 25px;
+    text-align: left;
     color:#cc0000;
   }
 
