@@ -21,31 +21,35 @@ function obterNumeroDeLetrasUnicas(palavra) {
 function criarArvore(palavra) {
     let letras = palavra.split("");
     let raiz = { letra: letras[0], esquerda: null, direita: null, altura: 1 };
-    let atual = raiz;
     for (let i = 1; i < letras.length; i++) {
-        if (Math.random() < 0.5) {
-            atual.esquerda = { letra: letras[i], esquerda: null, direita: null, altura: 1 };
-            atual = atual.esquerda;
-        } else {
-            atual.direita = { letra: letras[i], esquerda: null, direita: null, altura: 1 };
-            atual = atual.direita;
-        }
-        // balancear a árvore AVL após cada inserção
-        atual.altura = 1 + Math.max(getAltura(atual.esquerda), getAltura(atual.direita));
-        let fatorBalanceamento = getFatorBalanceamento(atual);
-        if (fatorBalanceamento > 1) {
-            if (getFatorBalanceamento(atual.esquerda) < 0) {
-                atual.esquerda = rotacaoEsquerda(atual.esquerda);
-            }
-            atual = rotacaoDireita(atual);
-        } else if (fatorBalanceamento < -1) {
-            if (getFatorBalanceamento(atual.direita) > 0) {
-                atual.direita = rotacaoDireita(atual.direita);
-            }
-            atual = rotacaoEsquerda(atual);
-        }
+        raiz = inserirNo(raiz, letras[i]);
     }
     return raiz;
+}
+
+function inserirNo(no, letra) {
+    if (no === null) {
+        return { letra: letra, esquerda: null, direita: null, altura: 1 };
+    }
+    if (letra < no.letra) {
+        no.esquerda = inserirNo(no.esquerda, letra);
+    } else {
+        no.direita = inserirNo(no.direita, letra);
+    }
+    no.altura = 1 + Math.max(getAltura(no.esquerda), getAltura(no.direita));
+    let fatorBalanceamento = getFatorBalanceamento(no);
+    if (fatorBalanceamento > 1) {
+        if (getFatorBalanceamento(no.esquerda) < 0) {
+            no.esquerda = rotacaoEsquerda(no.esquerda);
+        }
+        no = rotacaoDireita(no);
+    } else if (fatorBalanceamento < -1) {
+        if (getFatorBalanceamento(no.direita) > 0) {
+            no.direita = rotacaoDireita(no.direita);
+        }
+        no = rotacaoEsquerda(no);
+    }
+    return no;
 }
 
 // função auxiliar para obter a altura de um nó
@@ -66,23 +70,41 @@ function getFatorBalanceamento(no) {
 
 // função auxiliar para rotacionar um nó para a direita
 function rotacaoDireita(no) {
+    if (no === null || no.esquerda === null) {
+        return no;
+    }
     let novoNo = no.esquerda;
     no.esquerda = novoNo.direita;
     novoNo.direita = no;
     no.altura = 1 + Math.max(getAltura(no.esquerda), getAltura(no.direita));
     novoNo.altura = 1 + Math.max(getAltura(novoNo.esquerda), getAltura(novoNo.direita));
+    // atualizar altura dos nós afetados
+    if (no.esquerda !== null) {
+        no.esquerda.altura = 1 + Math.max(getAltura(no.esquerda.esquerda), getAltura(no.esquerda.direita));
+    }
+    novoNo.altura = 1 + Math.max(getAltura(novoNo.esquerda), getAltura(novoNo.direita));
     return novoNo;
 }
 
+
 // função auxiliar para rotacionar um nó para a esquerda
 function rotacaoEsquerda(no) {
+    if (no === null || no.direita === null) {
+        return no;
+    }
     let novoNo = no.direita;
     no.direita = novoNo.esquerda;
     novoNo.esquerda = no;
     no.altura = 1 + Math.max(getAltura(no.esquerda), getAltura(no.direita));
     novoNo.altura = 1 + Math.max(getAltura(novoNo.esquerda), getAltura(novoNo.direita));
+    // atualizar altura dos nós afetados
+    if (no.direita !== null) {
+        no.direita.altura = 1 + Math.max(getAltura(no.direita.esquerda), getAltura(no.direita.direita));
+    }
+    novoNo.altura = 1 + Math.max(getAltura(novoNo.esquerda), getAltura(novoNo.direita));
     return novoNo;
 }
+
 
 // Defina uma função para verificar se uma letra está na árvore binária
 function verificarLetra(letra, no) {
