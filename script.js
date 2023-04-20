@@ -52,19 +52,6 @@ function gerarListaJogadores() {
     document.getElementById("quem-joga").innerHTML = "Jogador: " + styleString(quemJoga);
 }
 
-function obterNumeroDeLetrasUnicas(palavra) {
-    const letras = palavra.split(''); // Converte a palavra para uma matriz de caracteres
-    const letrasUnicas = {}; // Objeto para armazenar as letras únicas
-  
-    // Percorre a matriz de caracteres e adiciona cada letra única ao objeto
-    letras.forEach(letra => {
-      letrasUnicas[letra] = true;
-    });
-  
-    // Retorna o número de letras únicas
-    return Object.keys(letrasUnicas).length;
-}
-
 function clearField(id) {
     document.getElementById(id).value = "";
 }
@@ -98,36 +85,9 @@ document.documentElement.style.setProperty('--tamanho-palavra', palavra.length);
 var dicaPalavraEscolhida = palavras[indicePalavraEscolhida].dica;
 document.getElementById("dica").innerHTML = "Dica: " + dicaPalavraEscolhida;
 
-// Defina uma função para criar uma árvore binária a partir da palavra escolhida
-function criarArvore(palavra) {
-    let letras = palavra.split("");
-    let raiz = { letra: letras[0], esquerda: null, direita: null };
-    let atual = raiz;
-    for (let i = 1; i < letras.length; i++) {
-        if (Math.random() < 0.5) {
-            atual.esquerda = { letra: letras[i], esquerda: null, direita: null };
-            atual = atual.esquerda;
-        } else {
-            atual.direita = { letra: letras[i], esquerda: null, direita: null };
-            atual = atual.direita;
-        }
-    }
-    return raiz;
-}
 
 // Crie a árvore binária para a palavra escolhida
 var arvore = criarArvore(palavraEscolhida);
-
-// Defina uma função para verificar se uma letra está na árvore binária
-function verificarLetra(letra, no) {
-    if (no === null) {
-        return false;
-    }
-    if (no.letra === letra) {
-        return true;
-    }
-    return verificarLetra(letra, no.esquerda) || verificarLetra(letra, no.direita);
-}
 
 // Defina uma função para atualizar a exibição da palavra
 function atualizarPalavra(letras) {
@@ -239,7 +199,7 @@ function updateJogadores() {
 // Defina uma função para reiniciar a exibição do boneco
 function reiniciarBoneco() {
     let partesBoneco = [
-    "cabeca", "braco-esquerdo", "braco-direito",
+    "cabeca", "corpo", "braco-esquerdo", "braco-direito",
     "perna-esquerda", "perna-direita"
     ];
     for (let i = 0; i < partesBoneco.length; i++) {
