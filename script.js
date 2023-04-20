@@ -94,6 +94,7 @@ function gerarListaJogadores() {
 }
 
 function clearField(id) {
+  document.getElementById('erro').innerText = "";
   document.getElementById(id).value = "";
 }
 
@@ -226,17 +227,16 @@ function reiniciarJogo(palavraPersonalizada = null, first = false) {
 }
 
 function updateJogadores() {
-  clearField("erro");
   const jogador = document.getElementById("jogador").value.toUpperCase();
   clearField("jogador");
   // Faz as alterações desejadas no objeto JavaScript
   if (players[jogador]) {
-    document.getElementById("erro").innerHTML = "Jogador Já existe";
+    document.getElementById("erro").innerHTML = "Jogador Já existe!";
     //new Promise((res) => setTimeout(res, 5000));
     //clearField('erro');
     return;
   } else if (Object.keys(players).length >= 5) {
-    document.getElementById("erro").innerHTML = "Limite de jogadores atingido";
+    document.getElementById("erro").innerHTML = "Limite de jogadores atingido!";
     //new Promise((res) => setTimeout(res, 5000));
     //clearField('erro');
     return;
