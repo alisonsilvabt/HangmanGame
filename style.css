@@ -4,6 +4,92 @@ body {
     font-family: sans-serif;
     height: 100vh;
     display: flex;
+    margin: 0;
+  }
+
+  .initial-screen {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #fdfcfe;
+  }
+
+  .content-background {
+    position: relative;
+    display: flex;
+  }
+
+  .img-hangman-left {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    
+  }
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .main-content h1 {
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 0;
+  }
+
+  .main-content button {
+    width: 100%;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+  }
+  th:first-child, td:first-child {
+    border-left: 1px solid #ddd;
+  }
+  th:last-child, td:last-child {
+    border-right: 1px solid #ddd;
+  }
+  th {
+    background-color: #4CAF50;
+    font-weight: bold;
+    color: #fff;
+  }
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+  /* .content-background {
+    background-image: url('./media//hangman.gif');
+    width: 1000px;
+    height: 700px;
+    background-position-x: -250px;
+  } */
+
+  .d-none {
+    display: none;
+  }
+
+  .game-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    width: 80%;
   }
 
   input {
@@ -38,9 +124,21 @@ body {
     width: 60%;
   }
 
+  .btn-iniciar {
+    width: 80%;
+  }
+
   #set {
     text-align: center;
-    width: 20%;
+   
+  }
+
+  #set .jogador {
+    width: 50%;
+  }
+
+  #set .btn-cadastrar {
+    width: 30%;
   }
 
   .aviso {
@@ -53,6 +151,7 @@ body {
   .novo-jogador {
     margin-top: 30px;
     text-align: center;
+    margin-bottom: 0px;
     color: #333;
   }
 
@@ -75,10 +174,15 @@ body {
   }
 
   #quem-joga {
-    text-align: center;
+    width: 200px;
     margin-top: 25px;
-    top: 25px;
-    left: 55px;
+    text-align: left;
+
+  }
+
+  #quem-joga span {
+    font-weight: bold;
+    color: #4CAF50;
   }
   
   .linha-pontilhada {
